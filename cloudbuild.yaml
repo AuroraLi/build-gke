@@ -1,0 +1,20 @@
+timeout: 10800s
+steps:
+
+  # [Kick off Terraform deployment]
+- name: "gcr.io/cloud-builders/gcloud"
+  id: "deploy-cluster"
+  dir: "terraform"
+  args:
+  - "builds"
+  - "submit"
+  
+
+  # [Deploy dyson manifests to GKE]
+- name: 'gcr.io/cloud-builders/kubectl'
+  waitFor:
+    - deploy-cluster
+  args: ['apply', '-f', './kubernetes/']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-f'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=dyson-cluster'
