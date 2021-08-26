@@ -56,7 +56,7 @@ resource "google_container_cluster" "dyson_cluster" {
     identity_namespace = "${var.project}.svc.id.goog"
   }
   node_pool {
-      initial_node_count = 2 
+      initial_node_count = 1 
       autoscaling {
           min_node_count = 1
           max_node_count = 5
