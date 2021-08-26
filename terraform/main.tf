@@ -56,15 +56,12 @@ resource "google_container_cluster" "dyson_cluster" {
   workload_identity_config {
     identity_namespace = "${var.project}.svc.id.goog"
   }
-#   node_config {
-#     workload_metadata_config {
-#       node_metadata = "GKE_METADATA_SERVER"
-#     }
-#     metadata = {
-#       disable-legacy-endpoints = "true"
-#     }
-
-#   }
+  node_pool {
+      autoscaling {
+          min_node_count = 1
+          max_node_count = 5
+      }
+  }
 }
 
 # resource "google_container_node_pool" "dyson_pool" {
