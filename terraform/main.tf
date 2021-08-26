@@ -45,7 +45,6 @@ resource "google_container_cluster" "dyson_cluster" {
   name               = "dyson-cluster"
   location           = var.zone
   remove_default_node_pool = false
-  initial_node_count       = 3
 #   networking_mode = "VPC_NATIVE"
   network = google_compute_network.network.id
   subnetwork = google_compute_subnetwork.subnet.id  
@@ -57,46 +56,13 @@ resource "google_container_cluster" "dyson_cluster" {
     identity_namespace = "${var.project}.svc.id.goog"
   }
   node_pool {
+      initial_node_count = 2 
       autoscaling {
           min_node_count = 1
           max_node_count = 5
       }
   }
 }
-
-# resource "google_container_node_pool" "dyson_pool" {
-#   provider = google-beta
-#   project    = var.project
-#   name       = "dysonpool"
-#   location   = var.zone
-#   cluster    = google_container_cluster.dyson_cluster.name
-#   initial_node_count = 2 
- 
-#   autoscaling {
-#     min_node_count = 0
-#     max_node_count = 4
-#   }
-
-#   management {
-#     auto_repair = "true"
-#     auto_upgrade = "true"
-#   }
-
-#   node_config {
-#     machine_type = "e2-standard-2"  
-#     oauth_scopes = [
-#       "https://www.googleapis.com/auth/cloud-platform",
-#     ]
-#     metadata = {
-#       disable-legacy-endpoints = "true"
-#     }
-#     workload_metadata_config {
-#       node_metadata = "GKE_METADATA_SERVER"
-#     }
-
-
-#   }
-# }
 
 # Workload Identity IAM binding for Dyson in default namespace.
 resource "google_service_account_iam_member" "dyson-sa-workload-identity" {
